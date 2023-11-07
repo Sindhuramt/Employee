@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Employee.Models.EmployeeModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Employee Management</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/js/validation.js"></script>
+
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .page-title {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .employee-table {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .employee-picture {
+            max-height: 100px;
+        }
+
+        .action-buttons .btn {
+            margin-left: 10px;
+        }
+
+        /* Custom table styles */
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-title">
+            <h1>Employee Management</h1>
+        </div>
+
+        <div>
+            <partial name="Create" model="new EmployeeModel()" />
+        </div>
+
+        <!-- Employee List/Grid -->
+        <div class="employee-table">
+            <h2>Employee List</h2>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date of Birth</th>
+                        <th>Date of Joining</th>
+                        <th>Email</th>
+                        <th>Picture</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var employee in Model)
+                    {
+                            <tr>
+                                <td>@employee.Name</td>
+                                <td>
+                                @if (employee.DateOfBirth != null)
+                                {
+                                    @employee.DateOfBirth.Value.ToString("dd-MM-yyyy")
+                                }
+                                </td>
+                                <td>
+                                @if (employee.DateOfJoining != null)
+                                {
+                                    @employee.DateOfJoining.Value.ToString("dd-MM-yyyy")
+                                }
+                                </td>
+                                <td>@employee.Email</td>
+                                <td>
+                                @if (!string.IsNullOrEmpty(employee.Picture))
+                                {
+                                            <img src="~/images/@employee.Picture" alt="Employee Picture" class="img-thumbnail employee-picture" />
+                                }
+                                </td>
+                                <td class="action-buttons">
+                                    <div class="d-flex justify-content-center">
+                                        <a asp-action="Edit" asp-route-id="@employee.ID" class="btn btn-primary">Edit</a>
+                                        <form asp-action="Delete" method="post" asp-route-id="@employee.ID" class="d-inline">
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this employee?')">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

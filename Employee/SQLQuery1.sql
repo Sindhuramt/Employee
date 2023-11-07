@@ -1,0 +1,1 @@
+﻿delete from Employee  where ID=5;
